@@ -1,4 +1,5 @@
 import React from 'react';
+import NavBar from './features/navbar/NavBar';
 
 import {
    Switch,
@@ -15,6 +16,7 @@ function App() {
 
    return (
       <>
+         <NavBar />
          <Switch>
             <Route exact path="/">
                <RecipesList />

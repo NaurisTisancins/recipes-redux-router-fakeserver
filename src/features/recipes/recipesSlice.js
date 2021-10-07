@@ -1,9 +1,8 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { getRecipes, addRecipe, getRecipe, updateRecipe } from './recipesAPI';
+import { getRecipes, addRecipe, updateRecipe, deleteRecipe } from './recipesAPI';
 
 const initialState = {
    recipes: [],
-   recipe: {},
    status: 'idle',
    error: null,
 }
@@ -26,14 +25,7 @@ export const addRecipes = createAsyncThunk(
    }
 );//end of addRecipes
 
-export const getRecipeById = createAsyncThunk(
-   'recipes/getRecipe',
-   async (data) => {
-      const response = await getRecipe(data);
-      console.log('get Recipe', response);
-      return response;
-   }
-);//end of GetRecipeById
+
 
 export const updateRecipes = createAsyncThunk(
    'recipes/updateRecipes',
@@ -43,6 +35,14 @@ export const updateRecipes = createAsyncThunk(
       return [id, data];
    }
 );//end of updateRecipes
+
+export const removeRecipes = createAsyncThunk(
+   'recipes/removeRecipes',
+   async (id) => {
+      await deleteRecipe(id);
+      return id;
+   }
+)
 
 //Slice
 export const recipesSlice = createSlice({
@@ -79,22 +79,8 @@ export const recipesSlice = createSlice({
          })
 
       builder
-         .addCase(getRecipeById.pending, (state) => {
-            state.status = 'loading';
-         })
-         .addCase(getRecipeById.fulfilled, (state, action) => {
-            state.status = 'idle';
-            state.recipe = action.payload;
-         })
-         .addCase(getRecipeById.rejected, (state, action) => {
-            state.status = 'errored';
-            state.error = action.error.message;
-            
-         })
-      
-      builder
          .addCase(updateRecipes.pending, (state) => {
-         state.status = 'loading';
+            state.status = 'loading';
          })
          .addCase(updateRecipes.fulfilled, (state, action) => {
             state.status = 'idle';
@@ -106,6 +92,23 @@ export const recipesSlice = createSlice({
             };
          })
          .addCase(updateRecipes.rejected, (state, action) => {
+            state.status = 'errored';
+            state.error = action.error.message;
+         })
+
+      builder
+         .addCase(removeRecipes.pending, (state) => {
+            state.status = 'loading';
+         })
+         .addCase(removeRecipes.fulfilled, (state, action) => {
+            state.status = 'idle';
+            console.log('id', action.payload);
+            const idx = state.recipes.findIndex(({ id }) => {
+               return id === action.payload;
+            })
+            state.recipes = [...state.recipes.slice(0, idx), ...state.recipes.slice(idx + 1)];
+         })
+         .addCase(removeRecipes.rejected, (state, action) => {
             state.status = 'errored';
             state.error = action.error.message;
          })

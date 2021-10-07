@@ -1,11 +1,9 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+
 import Grid from '@mui/material/Grid';
-import { makeStyles } from '@mui/styles';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-
-
 import Cards from './Cards';
 
 
@@ -17,28 +15,26 @@ import {
 } from './recipesSlice';
 // import styles from './Recipes.module.css';
 
-const useStyles = makeStyles({
+const styles = {
    recipeListTitle: {
       textAlign: 'center',
-      marginTop: '3rem'
+      marginTop: '1rem'
    },
    gridContainer: {
-      margin: 0,
+      marginTop: '1rem',
       width: '100%',
    },
    gridItem: {
       maxWidth: '100%',
       margin: 0
    }
-})
+}
 
 
 export default function RecipesList() {
    const recipes = useSelector(selectRecipes);
    const status = useSelector(selectStatus);
    const error = useSelector(selectError);
-
-   const classes = useStyles();
 
    const dispatch = useDispatch();
 
@@ -52,16 +48,18 @@ export default function RecipesList() {
 
    return (
 
-      <Container className={classes.gridContainer}>
+      <Container className={styles.gridContainer}>
          <Typography
             variant="h2"
             component="div"
             gutterBottom
-            className={classes.recipeListTitle}
-         >Our Recipes</Typography>
+            sx={styles.recipeListTitle}
+       >Our Recipes</Typography>
+       
          <Grid
             container
-            spacing={1}
+         spacing={1}
+         sx={styles.gridContainer}
          >
             {recipes.map(({ id, recipeName, description }) => {
                return (

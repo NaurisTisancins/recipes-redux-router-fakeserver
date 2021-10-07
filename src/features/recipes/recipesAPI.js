@@ -64,4 +64,20 @@ export async function updateRecipe(id, values) {
    } catch (err) {
       return Promise.reject(err.statusText || err.message)
    }
+
+}
+
+export async function deleteRecipe(id) {
+   try {
+      const response = await fetch(`${API_ENDPOINT}/${id}`, {
+         method: "DELETE",
+         headers: {
+            "content-type": "Application/json",
+         },
+      });
+      if (!response.ok) throw response;
+      return id;
+   } catch (err) {
+      return Promise.recect(err.statusText || err.message);
+   }
 }

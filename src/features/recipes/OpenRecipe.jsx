@@ -5,21 +5,19 @@ import {
 } from 'react-router-dom';
 
 import {
-   getRecipeById,
+
    selectRecipe,
    selectError,
    selectStatus,
 } from './recipesSlice';
 
 export default function OpenRecipe() {
-   const recipe = useSelector(selectRecipe);
-   const dispatch = useDispatch()
+
+
    
    const id = useParams();
 
-   useEffect(() => {
-      dispatch(getRecipeById(id));
-   }, [])
+
    
 
    return (
